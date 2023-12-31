@@ -114,15 +114,3 @@ jobs:
           VERSION: ${{ steps.prepare-deploy.outputs.PLUGIN_VERSION }}
           ASSETS_DIR: wp-assets
           BUILD_DIR: ${{ steps.prepare-deploy.outputs.PLUGIN_TMP_DIR }}
-
-      - name: Create GitHub Release
-        uses: comnoco/create-release-action@v2.0.5
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ steps.prepare-deploy.outputs.PLUGIN_VERSION }}
-          release_name: ${{ steps.prepare-deploy.outputs.PLUGIN_VERSION }}
-          draft: false
-          prerelease: false
-
-
