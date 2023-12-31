@@ -1,4 +1,4 @@
-name: Publish moneroo woocommerce plugin
+name: Publish
 
 on:
   push:

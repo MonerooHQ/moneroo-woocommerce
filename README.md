@@ -7,7 +7,7 @@
 
 <!-- Nav header - Start -->
 
-<a href="https://join.slack.com/t/ballerine-oss/shared_invite/zt-1iu6otkok-OqBF3TrcpUmFd9oUjNs2iw">Slack</a>
+<a href="https://join.slack.com/t/moneroo/shared_invite/zt-2a2fc6tuo-Dn~ORQwknfZdU64JqhvEMg">Slack</a>
 ·
 <a href="https://www.moneroo.io/">Website</a>
 ·
@@ -19,7 +19,7 @@
 
 <!-- Badges - Start -->
 ![PHP](https://img.shields.io/badge/php-%23777BB4.svg?style=rouded&logo=php&logoColor=white)
-[![Build Status](https://github.com/monerooHQ/moneroo-woocommerce/actions/workflows/run-tests.yml/badge.svg?branch=main)](https://github.com/moneroo/moneroo-woocommerce/actions?query=branch%3Amain)
+[![Build Status](https://github.com/monerooHQ/moneroo-woocommerce/actions/workflows/action.yml/badge.svg?branch=main)](https://github.com/moneroo/moneroo-woocommerce/actions?query=branch%3Amain)
 
 <!-- Badges - END -->
 
