@@ -3,7 +3,7 @@ name: Publish moneroo woocommerce plugin
 on:
   push:
     tags:
-      - 'v*' # Trigger on tags starting with 'v'
+       - "*.*" # Push events to matching *.* tags only
 
 env:
   SVN_REPOSITORY: "https://plugins.svn.wordpress.org/moneroo-woocommerce"
@@ -45,9 +45,13 @@ jobs:
           PLUGIN="moneroo"
           PROJECT_ROOT=$(pwd)
           PLUGIN_BUILDS_PATH="$PROJECT_ROOT/builds"
-          VERSION=$(awk 'NR==7' readme.txt | cut -d ' ' -f 3)
+          VERSION=$(sed -e "s/refs\/tags\///g" <<< $GITHUB_REF)
           ZIP_FILE="$PLUGIN_BUILDS_PATH/$PLUGIN-$VERSION.zip"
           
+          # Replace the version in these 2 files.
+          sed -i -e "s/__STABLE_TAG__/$VERSION/g" ./src/readme.txt
+          sed -i -e "s/__STABLE_TAG__/$VERSION/g" "./src/$PLUGIN_SLUG.php"
+                  
           mkdir -p $PLUGIN_BUILDS_PATH
           zip -r $ZIP_FILE . -x "build-cfg/*" "builds/*" ".*" "wp-assets/*" "build/*" "phpunit.xml.dist" "unused-scanner.php" "composer.json" "composer.lock" "README.md" ".php-cs-fixer.dist.php" "phpstan.neon" "phpunit.xml"
           
@@ -83,11 +87,11 @@ jobs:
           PLUGIN="moneroo"
           PROJECT_ROOT=$(pwd)
           PLUGIN_BUILDS_PATH="$PROJECT_ROOT/builds"
-          VERSION=$(awk 'NR==7' readme.txt | cut -d ' ' -f 3)
+          VERSION=$(sed -e "s/refs\/tags\///g" <<< $GITHUB_REF)
           ZIP_FILE="$PLUGIN_BUILDS_PATH/$PLUGIN-$VERSION.zip"
           TMP_DIR="$PLUGIN_BUILDS_PATH/tmp"
           PLUGIN_DIR="$TMP_DIR/$PLUGIN"
-          
+                    
           mkdir -p $PLUGIN_DIR
           unzip -q $ZIP_FILE -d $TMP_DIR
           
@@ -106,5 +110,15 @@ jobs:
           VERSION: ${{ steps.prepare-deploy.outputs.PLUGIN_VERSION }}
           ASSETS_DIR: wp-assets
           BUILD_DIR: ${{ steps.prepare-deploy.outputs.PLUGIN_TMP_DIR }}
+
+      - name: Create GitHub Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.prepare-deploy.outputs.PLUGIN_VERSION }}
+          release_name: ${{ steps.prepare-deploy.outputs.PLUGIN_VERSION }}
+          draft: false
+          prerelease: false
 
 

@@ -205,13 +205,13 @@ class Moneroo_WC_Gateway extends \WC_Payment_Gateway
     {
         global $woocommerce;
 
-        if (! isset($_GET['order_id'], $_GET['monerooPaymentId'])) {
+        if (! isset($_GET['order_id'], $_GET['paymentId'])) {
             wp_redirect(wc_get_checkout_url());
             exit;
         }
 
         $order_id = sanitize_text_field($_GET['order_id']);
-        $paymentTransactionId = sanitize_text_field($_GET['monerooPaymentId']);
+        $paymentTransactionId = sanitize_text_field($_GET['paymentId']);
 
         $order = wc_get_order($order_id);
 

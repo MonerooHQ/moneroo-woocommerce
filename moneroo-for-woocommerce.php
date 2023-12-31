@@ -10,7 +10,7 @@ use Moneroo\WooCommerce\Moneroo_WC_Gateway;
  * Author URI: https://axazara.com
  * License: GPLv2
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
- * Version: 1.0
+ * Version: __STABLE_TAG__
  * Requires at least: 4.9
  * Tested up to: 6.4
  * WC requires at least: 5.3

@@ -4,7 +4,7 @@ Contributors: axazara
 Tags: payments, woocommerce, moneroo, axazara, africa, ecommerce
 Requires at least: 4.9
 Tested up to: 6.4
-Stable tag: 1.0
+Stable tag: __STABLE_TAG__
 Requires PHP: 7.4
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
