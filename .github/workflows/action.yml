@@ -47,10 +47,14 @@ jobs:
           PLUGIN_BUILDS_PATH="$PROJECT_ROOT/builds"
           VERSION=$(sed -e "s/refs\/tags\///g" <<< $GITHUB_REF)
           ZIP_FILE="$PLUGIN_BUILDS_PATH/$PLUGIN-$VERSION.zip"
+          PLUGIN_SLUG="moneroo-for-woocommerce"
+          
+          
+          echo "Building plugin file, version $VERSION"
           
           # Replace the version in these 2 files.
-          sed -i -e "s/__STABLE_TAG__/$VERSION/g" ./src/readme.txt
-          sed -i -e "s/__STABLE_TAG__/$VERSION/g" "./src/$PLUGIN_SLUG.php"
+          sed -i -e "s/__STABLE_TAG__/$VERSION/g" ./readme.txt
+          sed -i -e "s/__STABLE_TAG__/$VERSION/g" "./$PLUGIN_SLUG.php"
                   
           mkdir -p $PLUGIN_BUILDS_PATH
           zip -r $ZIP_FILE . -x "build-cfg/*" "builds/*" ".*" "wp-assets/*" "build/*" "phpunit.xml.dist" "unused-scanner.php" "composer.json" "composer.lock" "README.md" ".php-cs-fixer.dist.php" "phpstan.neon" "phpunit.xml"
