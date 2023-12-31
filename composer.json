@@ -1,0 +1,29 @@
+{
+    "name": "moneroo/moneroo-woocommerce",
+    "description": "Kkiapay is developer friendly solution that allows you to accept mobile money and credit card, and direct bank payments in your application or website. Before using this plugin, make sure you have a right Merchant Account on Kkiapay, otherwise go and create your account. It is free and without pain.",
+    "authors": [
+        {
+            "name": "Axa Zara Core Dev",
+            "email": "core.dev@moneroo.io"
+        }
+    ],
+    "require": {
+        "ext-json": "*",
+        "moneroo/moneroo-php": "dev-main"
+    },
+    "require-dev": {
+        "spatie/ray": "^1.37",
+        "axazara/php-cs": "^0.1",
+        "insolita/unused-scanner": "^2.4"
+    },
+    "scripts": {
+        "sniff": "vendor/bin/php-cs-fixer fix -vvv --dry-run --show-progress=dots",
+        "format": "vendor/bin/php-cs-fixer fix -vv",
+        "unused": "vendor/bin/unused_scanner unused-scanner.php"
+    },
+    "autoload": {
+        "psr-4": {
+            "Moneroo\\WooCommerce\\": "src"
+        }
+    }
+}

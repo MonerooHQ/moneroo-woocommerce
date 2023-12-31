@@ -1,0 +1,9 @@
+
+parameters:
+    paths:
+        - includes
+    level: 4
+    ignoreErrors:
+
+    tmpDir: build/phpstan
+    checkMissingIterableValueType: false

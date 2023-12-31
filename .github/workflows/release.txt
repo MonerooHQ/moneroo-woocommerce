@@ -1,0 +1,93 @@
+name: Publish moneroo woocommerce plugin
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  SVN_REPOSITORY: "https://plugins.svn.wordpress.org/moneroo-woocommerce"
+  SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
+  SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cache Composer packages
+        id: composer-cache
+        uses: actions/cache@v3
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-
+
+      - name: Install dependencies
+        run: composer install --no-dev --prefer-dist --optimize-autoloader --no-interaction
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Dependencies
+        run: composer install --prefer-dist --no-interaction --no-dev --optimize-autoloader --no-interaction
+
+      - name: Generate ZIP
+        id: building-zip
+        run: |
+          PLUGIN="moneroo-woocommerce"
+          PROJECT_ROOT=$(pwd)
+          PLUGIN_BUILDS_PATH="$PROJECT_ROOT/builds"
+          VERSION=$(awk 'NR==7' readme.txt | cut -d ' ' -f 3)
+          ZIP_FILE="$PLUGIN_BUILDS_PATH/$PLUGIN-$VERSION.zip"
+          
+          mkdir -p $PLUGIN_BUILDS_PATH
+          zip -r $ZIP_FILE . -x "deploy/*" "build-cfg/*" "builds/*" ".*" "wp-assets/*" "build/*" "phpunit.xml.dist" "unused-scanner.php" "composer.json" "composer.lock" "README.md" ".php-cs-fixer.dist.php" "phpstan.neon" "phpunit.xml"
+          
+          if [ ! -f "$ZIP_FILE" ]; then
+            echo "Built zip file $ZIP_FILE does not exist" 1>&2
+            exit 1
+          fi
+          cp $ZIP_FILE $PLUGIN_BUILDS_PATH/moneroo-woocommerce.zip
+          
+          if [ ! -f "$PLUGIN_BUILDS_PATH/moneroo-woocommerce.zip" ]; then
+            echo "Built zip file $PLUGIN_BUILDS_PATH/moneroo-woocommerce.zip does not exist" 1>&2
+            exit 1
+          fi
+            
+          echo "Plugin file $PLUGIN_BUILDS_PATH/moneroo-woocommerce.zip successfully built"
+          
+          echo "ZIP_FILE=$PLUGIN_BUILDS_PATH/moneroo-woocommerce.zip" >> $GITHUB_OUTPUT
+          
+          echo "Successfully built $ZIP_FILE"
+
+      - name: Publish to CDN via S3
+        uses: axazara/easy-s3-upload-github-action@main
+        env:
+          FILE: ${{ steps.building-zip.outputs.ZIP_FILE }}
+          S3_ENDPOINT: ${{ secrets.CLOUDFLARE_ENDPOINT }}
+          S3_BUCKET: 'plugins'
+          S3_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_ACCESS_KEY_ID }}
+          S3_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_SECRET_ACCESS_KEY }}
+
+#  deploy_on_wordpress_svn:
+#    needs: build
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      - uses: actions/checkout@v4
+#
+#      - name: Change file permissions
+#        run: chmod +x ./deploy/deploy.sh
+#
+#      - name: Run deploy shell script
+#        run: ./deploy/deploy.sh
+
