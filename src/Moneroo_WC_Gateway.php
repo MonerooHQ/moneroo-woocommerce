@@ -2,6 +2,7 @@
 
 namespace Moneroo\WooCommerce;
 
+use Automattic\WooCommerce\Blocks\Payments\PaymentMethodRegistry;
 use function add_action;
 use function add_filter;
 use function esc_html__;
@@ -35,8 +36,7 @@ if (! defined('ABSPATH')) {
 
 require_once ABSPATH . 'wp-admin/includes/plugin.php';
 
-class Moneroo_WC_Gateway extends \WC_Payment_Gateway
-{
+class Moneroo_WC_Gateway extends \WC_Payment_Gateway {
     public Payment $moneroo;
 
     public array $moneroo_wc_moneroo_wc_config = [];
@@ -56,7 +56,12 @@ class Moneroo_WC_Gateway extends \WC_Payment_Gateway
         if ($this->moneroo_wc_keys_are_set()) {
             $this->moneroo_wc_load_moneroo();
         }
-        $this->moneroo_wc_register_hooks();
+       $this->moneroo_wc_register_hooks();
+    }
+
+    public function is_available(): bool
+    {
+        return $this->moneroo_wc_check_if_gateway_is_available();
     }
 
     private function moneroo_wc_initialize_gateway_details(): void
@@ -66,6 +71,10 @@ class Moneroo_WC_Gateway extends \WC_Payment_Gateway
         $this->has_fields = false;
         $this->method_title = 'Moneroo';
         $this->method_description = esc_html__('Enable your customers to pay you anywhere in Africa and around the world using multiple local payment methods with a single integration to many payment gateways.', 'moneroo-woocommerce');
+
+        $this->supports = array(
+            'products'
+        );
     }
 
     private function moneroo_wc_register_filters(): void
@@ -85,6 +94,7 @@ class Moneroo_WC_Gateway extends \WC_Payment_Gateway
     {
         $this->init_form_fields();
         $this->init_settings();
+
         foreach ($this->settings as $settingKey => $value) {
             $this->{$settingKey} = $value;
             $this->moneroo_wc_moneroo_wc_config[$settingKey] = $value;
@@ -95,18 +105,43 @@ class Moneroo_WC_Gateway extends \WC_Payment_Gateway
         if (empty($this->description)) {
             $this->description = esc_html__('Pay securely with your Mobile Money account, credit card, bank account or other payment methods.', 'moneroo-woocommerce');
         }
+
+        $this->enabled = $this->get_option('enabled') === 'yes';
+
     }
 
     private function moneroo_wc_register_hooks(): void
     {
         register_activation_hook(__FILE__, 'moneroo_wc_generate_webhook_secret');
+
         add_action('admin_notices', [$this, 'moneroo_wc_do_ssl_check']);
         add_action('admin_notices', [$this, 'moneroo_wc_require_keys']);
+
         add_action('woocommerce_api_' . strtolower(get_class($this)), [$this, 'moneroo_wc_handle_moneroo_wc_return']);
         add_action('woocommerce_api_moneroo_wc_webhook', [$this, 'moneroo_wc_handle_moneroo_wc_webhook']);
-        if (is_admin()) {
-            add_action('woocommerce_update_options_payment_gateways_' . $this->id, [$this, 'process_admin_options']);
-        }
+
+        add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array(
+            $this,
+            'process_admin_options',
+        ) );
+
+        add_filter( 'woocommerce_available_payment_gateways', [$this, 'moneroo_wc_add_gateway_to_checkout'] );
+
+        add_action(
+            'woocommerce_update_options_payment_gateways_' . $this->id,
+            array(
+                $this,
+                'process_admin_options',
+            )
+        );
+
+        $this->enabled = $this->get_option('enabled') === 'yes';
+    }
+
+    public function moneroo_wc_add_gateway_to_checkout($gateways): array
+    {
+        $gateways[] = $this;
+        return $gateways;
     }
 
     public function init_form_fields(): void
@@ -130,6 +165,7 @@ class Moneroo_WC_Gateway extends \WC_Payment_Gateway
     public function process_payment($order_id): array
     {
         $order = wc_get_order($order_id);
+
         if (! $this->moneroo_wc_check_if_gateway_is_available()) {
             wc_add_notice(
                 esc_html__('Moneroo is not available at the moment. Please try again later. If you are the site owner, please check your Moneroo settings.', 'moneroo-woocommerce'),
@@ -296,7 +332,7 @@ class Moneroo_WC_Gateway extends \WC_Payment_Gateway
      */
     private function moneroo_wc_keys_are_set(): bool
     {
-        return ! (empty($this->moneroo_wc_public_key) || empty($this->moneroo_wc_private_key));
+        return ! empty($this->moneroo_wc_public_key) && ! empty($this->moneroo_wc_private_key);
     }
 
     /**
@@ -351,7 +387,7 @@ class Moneroo_WC_Gateway extends \WC_Payment_Gateway
             return false;
         }
 
-        return ! ($this->moneroo_wc_keys_are_set() === false);
+        return $this->moneroo_wc_keys_are_set();
     }
 
     public static function moneroo_wc_get_webhook_url(): string
