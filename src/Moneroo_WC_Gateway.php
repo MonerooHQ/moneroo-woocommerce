@@ -102,8 +102,13 @@ class Moneroo_WC_Gateway extends \WC_Payment_Gateway
         register_activation_hook(__FILE__, 'moneroo_wc_generate_webhook_secret');
         add_action('admin_notices', [$this, 'moneroo_wc_do_ssl_check']);
         add_action('admin_notices', [$this, 'moneroo_wc_require_keys']);
-        add_action('woocommerce_api_' . strtolower(get_class($this)), [$this, 'moneroo_wc_handle_moneroo_wc_return']);
-        add_action('woocommerce_api_moneroo_wc_webhook', [$this, 'moneroo_wc_handle_moneroo_wc_webhook']);
+
+        //Moneroo Return Handler
+        add_action('woocommerce_api_moneroo_wc_payment_return', [$this, 'moneroo_wc_handle_return']);
+
+        //Moneroo Webhook Handler
+        add_action('woocommerce_api_moneroo_wc_webhook', [$this, 'moneroo_wc_handle_webhook']);
+
         if (is_admin()) {
             add_action('woocommerce_update_options_payment_gateways_' . $this->id, [$this, 'process_admin_options']);
         }
@@ -184,6 +189,8 @@ class Moneroo_WC_Gateway extends \WC_Payment_Gateway
             )
         );
 
+        $order->update_meta_data('_moneroo_payment_id', $payment->id);
+
         return [
             'result'   => 'success',
             'redirect' => $payment->checkout_url,
@@ -195,7 +202,10 @@ class Moneroo_WC_Gateway extends \WC_Payment_Gateway
      */
     public function get_payment_return_url(string $order_id): string
     {
-        return home_url('/') . '?wc-api=' . get_class($this) . '&order_id=' . $order_id;
+        $baseURL = esc_url(add_query_arg('wc-api', 'moneroo_wc_payment_return', home_url('/')));
+        $baseURL = add_query_arg('order_id', $order_id, $baseURL);
+
+        return str_replace('http:', 'https:', $baseURL);
     }
 
     /**
@@ -356,6 +366,6 @@ class Moneroo_WC_Gateway extends \WC_Payment_Gateway
 
     public static function moneroo_wc_get_webhook_url(): string
     {
-        return esc_url(add_query_arg('wc-api', 'moneroo_wc_get_webhook_url', home_url('/')));
+        return esc_url(add_query_arg('wc-api', 'moneroo_wc_webhook', home_url('/')));
     }
 }

@@ -40,6 +40,7 @@ class Moneroo_WC_Payment_Handler
 
         try {
             $response = $this->moneroo->get($this->transactionId);
+
             $payment_order_id = isset($response->metadata->order_id) ? (int) $response->metadata->order_id : null;
 
             if (! $payment_order_id) {
@@ -54,7 +55,7 @@ class Moneroo_WC_Payment_Handler
 
             $this->process_payment_response($response, $order);
         } catch (Exception $e) {
-            wc_get_logger()->error('MPG Moneroo Payment Exception: ' . wp_kses($e->getMessage()), ['source' => 'moneroo-woocommerce']);
+            wc_get_logger()->error('Moneroo Payment Exception: ' . wp_kses($e->getMessage(), false), ['source' => 'moneroo-woocommerce-plugin']);
             $this->redirect_to_checkout_url();
         }
     }
@@ -67,17 +68,13 @@ class Moneroo_WC_Payment_Handler
             $response = $this->moneroo->get($this->transactionId);
             $payment_order_id = isset($response->metadata->order_id) ? (int) $response->metadata->order_id : null;
 
-            if (! $payment_order_id) {
-                return;
-            }
-
             $order = wc_get_order($payment_order_id);
             if (! $order) {
                 return;
             }
             $this->process_payment_response($response, $order);
         } catch (Exception $e) {
-            wc_get_logger()->error('MPG Moneroo Webhook Exception: ' . wp_kses($e->getMessage()), ['source' => 'moneroo-woocommerce']);
+            wc_get_logger()->error('MPG Moneroo Webhook Exception: ' . wp_kses($e->getMessage(), false), ['source' => 'moneroo-woocommerce']);
             return;
         }
     }
