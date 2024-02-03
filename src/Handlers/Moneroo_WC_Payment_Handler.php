@@ -44,11 +44,15 @@ class Moneroo_WC_Payment_Handler
             $payment_order_id = isset($response->metadata->order_id) ? (int) $response->metadata->order_id : null;
 
             if (! $payment_order_id) {
+                wc_get_logger()->info('Moneroo Payment Exception: Order ID not found in metadata', ['source' => 'moneroo-woocommerce-plugin']);
+
                 $this->redirect_to_checkout_url();
                 return;
             }
 
             if ($order->get_id() !== $payment_order_id) {
+                wc_get_logger()->info('Moneroo Payment Exception: Order ID mismatch', ['source' => 'moneroo-woocommerce-plugin']);
+
                 $this->redirect_to_checkout_url();
                 return;
             }
@@ -56,6 +60,7 @@ class Moneroo_WC_Payment_Handler
             $this->process_payment_response($response, $order);
         } catch (Exception $e) {
             wc_get_logger()->error('Moneroo Payment Exception: ' . wp_kses($e->getMessage(), false), ['source' => 'moneroo-woocommerce-plugin']);
+
             $this->redirect_to_checkout_url();
         }
     }
@@ -100,7 +105,9 @@ class Moneroo_WC_Payment_Handler
         }
 
         $order->update_status('completed');
+
         $this->woocommerce->cart->empty_cart();
+
         wc_reduce_stock_levels($order->get_id());
 
         $order->add_order_note(esc_html__('Payment was successful on Moneroo', 'moneroo-woocommerce'));
@@ -178,7 +185,7 @@ class Moneroo_WC_Payment_Handler
         $adminNotice .= " Moneroo Transaction ID: {$response->id}";
         $order->add_order_note($adminNotice);
 
-        $customerNotice = esc_html__('Your payment <strong>failed</strong>. ', 'moneroo-woocommerce');
+        $customerNotice = esc_html__('Your payment failed. ', 'moneroo-woocommerce');
         $customerNotice .= esc_html__('Please, try funding your account.', 'moneroo-woocommerce');
         $order->add_order_note($customerNotice, 1);
 
@@ -202,6 +209,8 @@ class Moneroo_WC_Payment_Handler
         if ($this->is_webhook) {
             return;
         }
+
+        wc_add_notice(esc_html__('An error occurred while processing your payment. Please try again.', 'moneroo-woocommerce'), 'error');
 
         wp_safe_redirect(wc_get_checkout_url());
         exit();
