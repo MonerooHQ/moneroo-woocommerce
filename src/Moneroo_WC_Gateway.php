@@ -156,7 +156,7 @@ class Moneroo_WC_Gateway extends \WC_Payment_Gateway
                 'email'      => $order->get_billing_email(),
                 'first_name' => $order->get_billing_first_name(),
                 'last_name'  => $order->get_billing_last_name(),
-                'phone'      => (int) $order->get_billing_phone(),
+                'phone'      => empty($order->get_billing_phone()) ? null : (int) $order->get_billing_phone(),
                 'address'    => $order->get_billing_address_1(),
                 'city'       => $order->get_billing_city(),
                 'state'      => $order->get_billing_state(),
