@@ -156,7 +156,7 @@ class Moneroo_WC_Gateway extends \WC_Payment_Gateway
                 'email'      => $order->get_billing_email(),
                 'first_name' => $order->get_billing_first_name(),
                 'last_name'  => $order->get_billing_last_name(),
-                'phone'      => $order->get_billing_phone(),
+                'phone'      => (int) $order->get_billing_phone(),
                 'address'    => $order->get_billing_address_1(),
                 'city'       => $order->get_billing_city(),
                 'state'      => $order->get_billing_state(),
@@ -176,6 +176,9 @@ class Moneroo_WC_Gateway extends \WC_Payment_Gateway
             $payment = $this->moneroo->init($payload);
         } catch (Exception $e) {
             wc_add_notice(wp_kses_post($e->getMessage()), 'error');
+
+            wc_get_logger()->error('Moneroo Payment Init Exception: ' . $e->getMessage(), ['source' => 'moneroo-woocommerce']);
+
             return [
                 'result'   => 'fail',
                 'redirect' => $order->get_checkout_payment_url(true),
@@ -249,20 +252,6 @@ class Moneroo_WC_Gateway extends \WC_Payment_Gateway
         if (! $this->moneroo_wc_check_if_gateway_is_available()) {
             wc_get_logger()->error('Moneroo Webhook Exception: Gateway is not available', ['source' => 'moneroo-woocommerce']);
             return;
-        }
-
-        if (! isset($_SERVER['HTTP_X_MONEROO_SIGNATURE'])) {
-            wc_get_logger()->error('Moneroo Webhook Exception: No HMAC signature sent', ['source' => 'moneroo-woocommerce']);
-            return;
-        }
-
-        $secret = get_option('moneroo_wc_webhook_secret');
-
-        $hmac_header = isset($_SERVER['HTTP_X_MONEROO_SIGNATURE']) ? sanitize_text_field($_SERVER['HTTP_X_MONEROO_SIGNATURE']) : '';
-        $calculated_hmac = hash_hmac('sha256', $payload, $secret);
-
-        if ($hmac_header !== $calculated_hmac) {
-            wc_get_logger()->error('Moneroo Webhook Exception: Invalid HMAC', ['source' => 'moneroo-woocommerce']);
         }
 
         try {
