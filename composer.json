@@ -9,7 +9,7 @@
     ],
     "require": {
         "ext-json": "*",
-        "moneroo/moneroo-php": "dev-main"
+        "moneroo/moneroo-php": "v0.1.0"
     },
     "require-dev": {
         "spatie/ray": "^1.37",
