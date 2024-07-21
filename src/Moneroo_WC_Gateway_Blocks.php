@@ -52,9 +52,9 @@ final class Moneroo_WC_Gateway_Blocks extends AbstractPaymentMethodType
             true
         );
 
-        // if (function_exists('wp_set_script_translations')) {
-        //     wp_set_script_translations('wc-kkiapay-blocks', 'woo-paystack',);
-        // }
+        //         if (function_exists('wp_set_script_translations')) {
+        //             wp_set_script_translations('moneroo-for-woocommerce', 'moneroo-for-woocommerce',);
+        //         }
 
         return ['moneroo_wc_woocommerce_plugin-blocks-integration'];
     }
