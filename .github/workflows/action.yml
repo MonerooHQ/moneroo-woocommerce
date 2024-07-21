@@ -59,6 +59,11 @@ jobs:
       - name: Install Dependencies
         run: composer install --prefer-dist --no-interaction --no-dev --optimize-autoloader --no-interaction
 
+      - name: Install JS dependencies
+        run: |
+            npm install
+            npm run build
+
       - name: Generate ZIP
         id: building-zip
         run: |

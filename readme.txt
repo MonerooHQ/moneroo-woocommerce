@@ -1,7 +1,7 @@
 === Moneroo for WooCommerce ===
 Donate link: https://moneroo.io
 Contributors: axazara
-Tags: payments, woocommerce, moneroo, axazara, africa, ecommerce
+Tags: payments, woocommerce, moneroo, axazara, africa
 Requires at least: 4.9
 Tested up to: 6.4
 Stable tag: __STABLE_TAG__

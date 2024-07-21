@@ -38,8 +38,6 @@ final class Moneroo_WC_Gateway_Blocks extends AbstractPaymentMethodType
      */
     public function get_payment_method_script_handles(): array
     {
-        $script_asset_path = plugins_url('build/index.asset.php', MONEROO_WC_MAIN_FILE);
-
         $script_url = plugins_url('build/index.js', MONEROO_WC_MAIN_FILE);
         wp_register_script(
             'moneroo_wc_woocommerce_plugin-blocks-integration',
