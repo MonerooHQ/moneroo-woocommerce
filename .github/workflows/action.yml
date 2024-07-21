@@ -3,7 +3,7 @@ name: Publish
 on:
   push:
     tags:
-       - "*.*" # Push events to matching *.* tags only
+      - "*.*" # Push events to matching *.* tags only
 
 env:
   SVN_REPOSITORY: "https://plugins.svn.wordpress.org/moneroo-woocommerce"
@@ -29,6 +29,26 @@ jobs:
       - name: Install dependencies
         run: composer install --no-dev --prefer-dist --optimize-autoloader --no-interaction
 
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - name: Cache npm modules
+        id: npm-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install npm dependencies
+        run: npm install
+
+      - name: Build project
+        run: npm run build
+
   publish:
     needs: build
     runs-on: ubuntu-latest
@@ -49,7 +69,6 @@ jobs:
           ZIP_FILE="$PLUGIN_BUILDS_PATH/$PLUGIN-$VERSION.zip"
           PLUGIN_SLUG="moneroo-for-woocommerce"
           
-          
           echo "Building plugin file, version $VERSION"
           
           # Replace the version in these 2 files.
@@ -57,7 +76,23 @@ jobs:
           sed -i -e "s/__STABLE_TAG__/$VERSION/g" "./$PLUGIN_SLUG.php"
                   
           mkdir -p $PLUGIN_BUILDS_PATH
-          zip -r $ZIP_FILE . -x "build-cfg/*" "builds/*" ".*" "wp-assets/*" "build/*" "phpunit.xml.dist" "unused-scanner.php" "composer.json" "composer.lock" "README.md" ".php-cs-fixer.dist.php" "phpstan.neon" "phpunit.xml"
+          zip -r $ZIP_FILE . -x "build-cfg/*" 
+            "builds/*" 
+            ".*" 
+            "wp-assets/*" 
+            "build/*" 
+            "node_modules/*",
+            "phpunit.xml.dist" 
+            "unused-scanner.php" 
+            "composer.json" 
+            "composer.lock" 
+            "README.md" 
+            ".php-cs-fixer.dist.php" 
+            "phpstan.neon" 
+            "phpunit.xml"
+            "src/index.js",
+            "pnpm-lock.yaml",
+            "test.sh",
           
           if [ ! -f "$ZIP_FILE" ]; then
             echo "Built zip file $ZIP_FILE does not exist" 1>&2
@@ -95,7 +130,7 @@ jobs:
           ZIP_FILE="$PLUGIN_BUILDS_PATH/$PLUGIN-$VERSION.zip"
           TMP_DIR="$PLUGIN_BUILDS_PATH/tmp"
           PLUGIN_DIR="$TMP_DIR/$PLUGIN"
-                    
+          
           mkdir -p $PLUGIN_DIR
           unzip -q $ZIP_FILE -d $TMP_DIR
           

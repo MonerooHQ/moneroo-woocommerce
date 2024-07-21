@@ -3,11 +3,9 @@
 namespace Moneroo\WooCommerce;
 
 use Automattic\WooCommerce\Blocks\Payments\Integrations\AbstractPaymentMethodType;
-use Automattic\WooCommerce\StoreApi\Payments\PaymentContext;
-use Automattic\WooCommerce\StoreApi\Payments\PaymentResult;
 
-final class Moneroo_WC_Gateway_Blocks extends AbstractPaymentMethodType {
-
+final class Moneroo_WC_Gateway_Blocks extends AbstractPaymentMethodType
+{
     /**
      * The gateway instance.
      *
@@ -20,16 +18,15 @@ final class Moneroo_WC_Gateway_Blocks extends AbstractPaymentMethodType {
     /**
      * Initializes the payment method type.
      */
-    public function initialize() {
-        $gateways       = WC()->payment_gateways->payment_gateways();
-        $this->gateway  = $gateways[ $this->name ];
+    public function initialize()
+    {
+        $gateways = WC()->payment_gateways->payment_gateways();
+        $this->gateway = $gateways[$this->name];
         $this->settings = $this->gateway->settings;
     }
 
     /**
      * Returns if this payment method should be active. If false, the scripts will not be enqueued.
-     *
-     * @return boolean
      */
     public function is_active(): bool
     {
@@ -38,42 +35,39 @@ final class Moneroo_WC_Gateway_Blocks extends AbstractPaymentMethodType {
 
     /**
      * Returns an array of scripts/handles to be registered for this payment method.
-     *
-     * @return array
      */
     public function get_payment_method_script_handles(): array
     {
+        $script_asset_path = plugins_url('build/index.asset.php', MONEROO_WC_MAIN_FILE);
+
+        $script_url = plugins_url('build/index.js', MONEROO_WC_MAIN_FILE);
         wp_register_script(
-            'wc-moneroo-blocks',
-            plugin_dir_url(__FILE__) . 'block/checkout.js',
+            'moneroo_wc_woocommerce_plugin-blocks-integration',
+            $script_url,
             [
-                'wc-blocks-registry',
-                'wc-settings',
-                'wp-element',
+                'react',
                 'wp-html-entities',
-                'wp-i18n',
             ],
             null,
             true
         );
 
-        if( function_exists( 'wp_set_script_translations' ) ) {
-            wp_set_script_translations(
-                'wc-moneroo-blocks',
-                'moneroo-for-woocommerce',
-            );
-        }
+        // if (function_exists('wp_set_script_translations')) {
+        //     wp_set_script_translations('wc-kkiapay-blocks', 'woo-paystack',);
+        // }
 
-        return [ 'wc-moneroo-blocks' ];
+        return ['moneroo_wc_woocommerce_plugin-blocks-integration'];
     }
 
+    /**
+     * Returns an array of key=>value pairs of data made available to the payment methods script.
+     */
     public function get_payment_method_data(): array
     {
         return [
-            'title' => $this->gateway->title,
+            'title'       => $this->gateway->title,
             'description' => $this->gateway->description,
-            'logo_url' => $this->gateway->icon,
+            'icon'        => $this->gateway->icon,
         ];
     }
-
 }

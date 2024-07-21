@@ -5,5 +5,5 @@ parameters:
     level: 4
     ignoreErrors:
 
-    tmpDir: build/phpstan
+    tmpDir: builds/phpstan
     checkMissingIterableValueType: false
