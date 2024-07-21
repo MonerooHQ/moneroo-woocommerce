@@ -33,11 +33,6 @@ return [
         'default'     => esc_html__('Pay securely with your Mobile Money account, credit card, bank account or other payment methods.', 'moneroo-woocommerce'),
         'desc_tip'    => true,
     ],
-    'moneroo_wc_public_key' => [
-        'title'       => esc_html__('Public KEY', 'moneroo-woocommerce'),
-        'type'        => 'password',
-        'description' => esc_html__('Get your API keys from your Moneroo dashboard', 'moneroo-woocommerce'),
-    ],
     'moneroo_wc_private_key' => [
         'title'       => esc_html__('Private KEY', 'moneroo-woocommerce'),
         'type'        => 'password',

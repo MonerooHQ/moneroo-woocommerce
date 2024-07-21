@@ -38,8 +38,6 @@ class Moneroo_WC_Gateway extends \WC_Payment_Gateway
 
     public array $moneroo_wc_moneroo_wc_config = [];
 
-    public ?string $moneroo_wc_public_key = null;
-
     public ?string $moneroo_wc_private_key = null;
 
     public function __construct()
@@ -118,7 +116,6 @@ class Moneroo_WC_Gateway extends \WC_Payment_Gateway
     public function moneroo_wc_load_moneroo(): void
     {
         $this->moneroo = new \Moneroo\Payment(
-            $this->moneroo_wc_public_key,
             $this->moneroo_wc_private_key,
         );
     }
