@@ -2,10 +2,10 @@
 
 # Define the name of the ZIP file
 PLUGIN="moneroo"
-VERSION="1.0.0" # Replace with your version
+VERSION="1.0.0".`date +%Y%m%d%H%M%S`
 ZIP_FILE="builds/$PLUGIN-$VERSION.zip"
 
-zip -r $ZIP_FILE . -x "build-cfg/*" "builds/*" ".*" "wp-assets/*" "build/*" "node_modules/*" "phpunit.xml.dist" "unused-scanner.php" "composer.json" "composer.lock" "README.md" ".php-cs-fixer.dist.php" "phpstan.neon" "phpunit.xml" "src/index.js" "pnpm-lock.yaml" "test.sh" "package-lock.json" "package.json"
+zip -r $ZIP_FILE . -x "build-cfg/*" "builds/*" ".*" "wp-assets/*" "node_modules/*" "phpunit.xml.dist" "unused-scanner.php" "composer.json" "composer.lock" "README.md" ".php-cs-fixer.dist.php" "phpstan.neon" "phpunit.xml" "src/index.js" "pnpm-lock.yaml" "test.sh" "package-lock.json" "package.json"
 
 # Create the builds directory if it doesn't exist
 mkdir -p builds

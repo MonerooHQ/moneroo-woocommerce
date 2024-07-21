@@ -80,7 +80,6 @@ jobs:
             "builds/*" 
             ".*" 
             "wp-assets/*" 
-            "build/*" 
             "node_modules/*",
             "phpunit.xml.dist" 
             "unused-scanner.php" 
