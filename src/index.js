@@ -3,8 +3,11 @@ const { registerPaymentMethod } = window.wc.wcBlocksRegistry
 const { getSetting } = window.wc.wcSettings
 
 const settings = getSetting('moneroo_wc_woocommerce_plugin_data', {})
-
-const label = decodeEntities(settings.title)
+const defaultLabel = __(
+    'Pay securely with your Mobile Money account, credit card, bank account or other payment methods.',
+    'moneroo-woocommerce'
+);
+const label = decodeEntities(settings.title) || defaultLabel
 
 const Content = () => {
     return decodeEntities(settings.description || '')

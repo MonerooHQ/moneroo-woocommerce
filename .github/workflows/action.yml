@@ -76,6 +76,7 @@ jobs:
           sed -i -e "s/__STABLE_TAG__/$VERSION/g" "./$PLUGIN_SLUG.php"
                   
           mkdir -p $PLUGIN_BUILDS_PATH
+          
           zip -r $ZIP_FILE . -x "build-cfg/*" 
             "builds/*" 
             ".*" 
@@ -103,7 +104,7 @@ jobs:
             echo "Built zip file $PLUGIN_BUILDS_PATH/moneroo.zip does not exist" 1>&2
             exit 1
           fi
-          
+      
           echo "Plugin file $PLUGIN_BUILDS_PATH/moneroo.zip successfully built"
           
           echo "ZIP_FILE=$PLUGIN_BUILDS_PATH/moneroo.zip" >> $GITHUB_OUTPUT
