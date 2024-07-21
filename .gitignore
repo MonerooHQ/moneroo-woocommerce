@@ -3,3 +3,6 @@ vendor/
 .php-cs-fixer.php
 build
 .DS_Store
+pnpm-lock.yaml
+builds
+node_modules

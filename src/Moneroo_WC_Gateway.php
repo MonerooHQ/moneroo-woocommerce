@@ -14,7 +14,6 @@ use function get_woocommerce_currency;
 use function home_url;
 use function is_admin;
 
-use Moneroo\Payment;
 use Moneroo\WooCommerce\Handlers\Moneroo_WC_Payment_Handler;
 
 use function plugin_dir_path;
@@ -25,9 +24,7 @@ use function update_option;
 use function wc_add_notice;
 use function wc_get_logger;
 use function wc_get_order;
-use function wp_enqueue_style;
 use function wp_redirect;
-use function wp_register_style;
 
 if (! defined('ABSPATH')) {
     exit;
@@ -37,9 +34,11 @@ require_once ABSPATH . 'wp-admin/includes/plugin.php';
 
 class Moneroo_WC_Gateway extends \WC_Payment_Gateway
 {
-    public Payment $moneroo;
+    public \Moneroo\Payment $moneroo;
 
     public array $moneroo_wc_moneroo_wc_config = [];
+
+    public ?string $moneroo_wc_public_key = null;
 
     public ?string $moneroo_wc_private_key = null;
 
@@ -49,7 +48,6 @@ class Moneroo_WC_Gateway extends \WC_Payment_Gateway
         $this->moneroo_wc_initialize_gateway_details();
         $this->moneroo_wc_initialize_settings();
         $this->moneroo_wc_register_filters();
-        $this->moneroo_wc_load_custom_css_styles();
         $this->moneroo_wc_check_if_webhook_secret_is_set_or_generate();
         if ($this->moneroo_wc_keys_are_set()) {
             $this->moneroo_wc_load_moneroo();
@@ -119,7 +117,8 @@ class Moneroo_WC_Gateway extends \WC_Payment_Gateway
 
     public function moneroo_wc_load_moneroo(): void
     {
-        $this->moneroo = new Payment(
+        $this->moneroo = new \Moneroo\Payment(
+            $this->moneroo_wc_public_key,
             $this->moneroo_wc_private_key,
         );
     }
@@ -132,6 +131,7 @@ class Moneroo_WC_Gateway extends \WC_Payment_Gateway
     public function process_payment($order_id): array
     {
         $order = wc_get_order($order_id);
+
         if (! $this->moneroo_wc_check_if_gateway_is_available()) {
             wc_add_notice(
                 esc_html__('Moneroo is not available at the moment. Please try again later. If you are the site owner, please check your Moneroo settings.', 'moneroo-woocommerce'),
@@ -153,8 +153,7 @@ class Moneroo_WC_Gateway extends \WC_Payment_Gateway
                 'email'      => $order->get_billing_email(),
                 'first_name' => $order->get_billing_first_name(),
                 'last_name'  => $order->get_billing_last_name(),
-                'phone'      => empty($order->get_billing_phone()) ? null : (int) $order->get_billing_phone(),
-                'address'    => $order->get_billing_address_1(),
+                'phone'      => empty($order->get_billing_phone()) ? null : (int) $order->get_billing_phone(),                'address'    => $order->get_billing_address_1(),
                 'city'       => $order->get_billing_city(),
                 'state'      => $order->get_billing_state(),
                 'country'    => $order->get_billing_country(),
@@ -303,13 +302,6 @@ class Moneroo_WC_Gateway extends \WC_Payment_Gateway
         require_once plugin_dir_path(__FILE__) . '/Handlers/Moneroo_WC_Payment_Handler.php';
     }
 
-    // Load custom CSS styles.
-    public function moneroo_wc_load_custom_css_styles(): void
-    {
-        wp_register_style('custom-moneroo-style', plugins_url('../assets/css/style.css', __FILE__));
-        wp_enqueue_style('custom-moneroo-style');
-    }
-
     /**
      * Load plugin text domain.
      */
@@ -347,7 +339,7 @@ class Moneroo_WC_Gateway extends \WC_Payment_Gateway
             return false;
         }
 
-        return ! ($this->moneroo_wc_keys_are_set() === false);
+        return $this->moneroo_wc_keys_are_set();
     }
 
     public static function moneroo_wc_get_webhook_url(): string
