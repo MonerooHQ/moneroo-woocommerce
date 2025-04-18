@@ -44,14 +44,14 @@ class Moneroo_WC_Payment_Handler
             $payment_order_id = isset($response->metadata->order_id) ? (int) $response->metadata->order_id : null;
 
             if (! $payment_order_id) {
-                wc_get_logger()->info('Moneroo Payment Exception: Order ID not found in metadata', ['source' => 'moneroo-woocommerce-plugin']);
+                wc_get_logger()->info('Moneroo Payment Exception: Order ID not found in metadata', ['source' => 'moneroo-plugin']);
 
                 $this->redirect_to_checkout_url();
                 return;
             }
 
             if ($order->get_id() !== $payment_order_id) {
-                wc_get_logger()->info('Moneroo Payment Exception: Order ID mismatch', ['source' => 'moneroo-woocommerce-plugin']);
+                wc_get_logger()->info('Moneroo Payment Exception: Order ID mismatch', ['source' => 'moneroo-plugin']);
 
                 $this->redirect_to_checkout_url();
                 return;
@@ -59,7 +59,7 @@ class Moneroo_WC_Payment_Handler
 
             $this->process_payment_response($response, $order);
         } catch (Exception $e) {
-            wc_get_logger()->error('Moneroo Payment Exception: ' . wp_kses($e->getMessage(), false), ['source' => 'moneroo-woocommerce-plugin']);
+            wc_get_logger()->error('Moneroo Payment Exception: ' . wp_kses($e->getMessage(), false), ['source' => 'moneroo-plugin']);
 
             $this->redirect_to_checkout_url();
         }
@@ -79,7 +79,7 @@ class Moneroo_WC_Payment_Handler
             }
             $this->process_payment_response($response, $order);
         } catch (Exception $e) {
-            wc_get_logger()->error('MPG Moneroo Webhook Exception: ' . wp_kses($e->getMessage(), false), ['source' => 'moneroo-woocommerce']);
+            wc_get_logger()->error('MPG Moneroo Webhook Exception: ' . wp_kses($e->getMessage(), false), ['source' => 'moneroo']);
             return;
         }
     }
@@ -110,11 +110,11 @@ class Moneroo_WC_Payment_Handler
 
         wc_reduce_stock_levels($order->get_id());
 
-        $order->add_order_note(esc_html__('Payment was successful on Moneroo', 'moneroo-woocommerce'));
+        $order->add_order_note(esc_html__('Payment was successful on Moneroo', 'moneroo'));
         $order->add_order_note("<br> Moneroo Transaction ID: {$response->id}");
 
-        $customer_note = esc_html__('Thank you for your order.<br>', 'moneroo-woocommerce');
-        $customer_note .= esc_html__('Your payment was successful, we are now <strong>processing</strong> your order.', 'moneroo-woocommerce');
+        $customer_note = esc_html__('Thank you for your order.<br>', 'moneroo');
+        $customer_note .= esc_html__('Your payment was successful, we are now <strong>processing</strong> your order.', 'moneroo');
 
         $order->add_order_note($customer_note, 1);
 
@@ -132,14 +132,14 @@ class Moneroo_WC_Payment_Handler
 
         $order->update_status('on-hold');
 
-        $admin_notice = esc_html__('Payment is pending on Moneroo', 'moneroo-woocommerce');
+        $admin_notice = esc_html__('Payment is pending on Moneroo', 'moneroo');
         $admin_notice .= "<br> Moneroo Transaction ID: {$response->id}";
 
         $order->add_order_note($admin_notice);
 
-        $customer_notice = esc_html__('Thank you for your order.<br>', 'moneroo-woocommerce');
-        $customer_notice .= esc_html__('Your payment has not been confirmed yet, so we have to put your order <strong>on-hold</strong>, once the payment is confirmed, we will <strong>process</strong> your order.', 'moneroo-woocommerce');
-        $customer_notice .= esc_html__('If this persists, Please, contact us for information regarding this order.', 'moneroo-woocommerce');
+        $customer_notice = esc_html__('Thank you for your order.<br>', 'moneroo');
+        $customer_notice .= esc_html__('Your payment is <strong>pending</strong>. We will update your order once we <strong>process</strong> your order.', 'moneroo');
+        $customer_notice .= esc_html__('If this persists, Please, contact us for information regarding this order.', 'moneroo');
 
         $order->add_order_note($customer_notice, 1);
 
@@ -156,7 +156,7 @@ class Moneroo_WC_Payment_Handler
         $order->update_status('on-hold');
 
         $admin_notice = sprintf(
-            esc_html__('Attention: New order has been placed on hold because of incorrect payment amount. Please, look into it. <br> Moneroo Transaction ID: %s <br> Amount paid: %s %s <br> Order amount: %s %s', 'moneroo-woocommerce'),
+            esc_html__('Attention: New order has been placed on hold because of incorrect payment amount. Please, look into it. <br> Moneroo Transaction ID: %1$s <br> Amount paid: %2$s %3$s <br> Order amount: %4$s %5$s', 'moneroo'),
             esc_html($response->id),
             esc_html($order->get_currency()),
             esc_html($response->amount),
@@ -166,9 +166,9 @@ class Moneroo_WC_Payment_Handler
 
         $order->add_order_note($admin_notice);
 
-        $customer_notice = esc_html__('Thank you for your order.<br>', 'moneroo-woocommerce');
-        $customer_notice .= esc_html__('Your payment has not been confirmed yet, so we have to put your order <strong>on-hold</strong>, once the payment is confirmed, we will <strong>process</strong> your order. ', 'moneroo-woocommerce');
-        $customer_notice .= esc_html__('If this persists, Please, contact us for information regarding this order.', 'moneroo-woocommerce');
+        $customer_notice = esc_html__('Thank you for your order.<br>', 'moneroo');
+        $customer_notice .= esc_html__('Your payment has not been confirmed yet, so we have to put your order <strong>on-hold</strong>, once the payment is confirmed, we will <strong>process</strong> your order. ', 'moneroo');
+        $customer_notice .= esc_html__('If this persists, Please, contact us for information regarding this order.', 'moneroo');
         $order->add_order_note($customer_notice, 1);
 
         $this->redirect_to_return_url();
@@ -181,12 +181,12 @@ class Moneroo_WC_Payment_Handler
             return;
         }
 
-        $adminNotice = esc_html__('Payment failed on Moneroo', 'moneroo-woocommerce');
+        $adminNotice = esc_html__('Payment failed on Moneroo', 'moneroo');
         $adminNotice .= " Moneroo Transaction ID: {$response->id}";
         $order->add_order_note($adminNotice);
 
-        $customerNotice = esc_html__('Your payment failed. ', 'moneroo-woocommerce');
-        $customerNotice .= esc_html__('Please, try funding your account.', 'moneroo-woocommerce');
+        $customerNotice = esc_html__('Your payment failed. ', 'moneroo');
+        $customerNotice .= esc_html__('Please, try funding your account.', 'moneroo');
         $order->add_order_note($customerNotice, 1);
 
         wc_add_notice($customerNotice, 'error');
@@ -210,7 +210,7 @@ class Moneroo_WC_Payment_Handler
             return;
         }
 
-        wc_add_notice(esc_html__('An error occurred while processing your payment. Please try again.', 'moneroo-woocommerce'), 'error');
+        wc_add_notice(esc_html__('An error occurred while processing your payment. Please try again.', 'moneroo'), 'error');
 
         wp_safe_redirect(wc_get_checkout_url());
         exit();

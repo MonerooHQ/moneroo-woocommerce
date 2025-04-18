@@ -56,10 +56,10 @@ class Moneroo_WC_Gateway extends \WC_Payment_Gateway
     private function moneroo_wc_initialize_gateway_details(): void
     {
         $this->id = 'moneroo_wc_woocommerce_plugin';
-        $this->icon = plugins_url('../assets/img/icon.svg', __FILE__);
+        $this->icon = plugins_url('/../assets/images/logo.png', __FILE__);
         $this->has_fields = false;
-        $this->method_title = 'Moneroo';
-        $this->method_description = esc_html__('Enable your customers to pay you anywhere in Africa and around the world using multiple local payment methods with a single integration to many payment gateways.', 'moneroo-woocommerce');
+        $this->method_title = 'Moneroo for WooCommerce';
+        $this->method_description = esc_html__('Accept payments via Mobile Money, Credit Card, Bank transfer through single integration to many payment gateways.', 'moneroo');
     }
 
     private function moneroo_wc_register_filters(): void
@@ -84,10 +84,10 @@ class Moneroo_WC_Gateway extends \WC_Payment_Gateway
             $this->moneroo_wc_moneroo_wc_config[$settingKey] = $value;
         }
         if (empty($this->title)) {
-            $this->title = esc_html__('Mobile Money, Credit Card, Bank transfer and more', 'moneroo-woocommerce');
+            $this->title = esc_html__('Mobile Money, Credit Card, Bank transfer and more', 'moneroo');
         }
         if (empty($this->description)) {
-            $this->description = esc_html__('Pay securely with your Mobile Money account, credit card, bank account or other payment methods.', 'moneroo-woocommerce');
+            $this->description = esc_html__('Pay securely with your Mobile Money account, credit card, bank account or other payment methods.', 'moneroo');
         }
     }
 
@@ -131,7 +131,7 @@ class Moneroo_WC_Gateway extends \WC_Payment_Gateway
 
         if (! $this->moneroo_wc_check_if_gateway_is_available()) {
             wc_add_notice(
-                esc_html__('Moneroo is not available at the moment. Please try again later. If you are the site owner, please check your Moneroo settings.', 'moneroo-woocommerce'),
+                esc_html__('Moneroo is not available at the moment. Please try again later. If you are the site owner, please check your Moneroo settings.', 'moneroo'),
                 'error'
             );
 
@@ -171,7 +171,7 @@ class Moneroo_WC_Gateway extends \WC_Payment_Gateway
         } catch (Exception $e) {
             wc_add_notice(wp_kses_post($e->getMessage()), 'error');
 
-            wc_get_logger()->error('Moneroo Payment Init Exception: ' . $e->getMessage(), ['source' => 'moneroo-woocommerce']);
+            wc_get_logger()->error('Moneroo Payment Init Exception: ' . $e->getMessage(), ['source' => 'moneroo']);
 
             return [
                 'result'   => 'fail',
@@ -181,7 +181,7 @@ class Moneroo_WC_Gateway extends \WC_Payment_Gateway
 
         $order->add_order_note(
             sprintf(
-                wp_kses_post(__('Payment initiated on Moneroo. ID: %s', 'moneroo-woocommerce')),
+                wp_kses_post(__('Payment initiated on Moneroo. ID: %s', 'moneroo')),
                 esc_html($payment->id)
             )
         );
@@ -244,7 +244,7 @@ class Moneroo_WC_Gateway extends \WC_Payment_Gateway
         $payload = file_get_contents('php://input');
 
         if (! $this->moneroo_wc_check_if_gateway_is_available()) {
-            wc_get_logger()->error('Moneroo Webhook Exception: Gateway is not available', ['source' => 'moneroo-woocommerce']);
+            wc_get_logger()->error('Moneroo Webhook Exception: Gateway is not available', ['source' => 'moneroo']);
             return;
         }
 
@@ -265,7 +265,7 @@ class Moneroo_WC_Gateway extends \WC_Payment_Gateway
 
             $monerooHandler->handle_webhook();
         } catch (Exception $e) {
-            wc_get_logger()->error('Moneroo Webhook Exception: ' . $e->getMessage(), ['source' => 'moneroo-woocommerce']);
+            wc_get_logger()->error('Moneroo Webhook Exception: ' . $e->getMessage(), ['source' => 'moneroo']);
             return;
         }
     }
@@ -280,7 +280,7 @@ class Moneroo_WC_Gateway extends \WC_Payment_Gateway
             : 'wc-settings&tab=checkout';
 
         if (($this->enabled === 'yes') && get_option('woocommerce_force_ssl_checkout') == 'no') {
-            echo wp_kses_post('<div class="error"><p>' . sprintf(__('<strong>%s</strong> is enabled and WooCommerce is not forcing the SSL certificate on your checkout page. Please ensure that you have a valid SSL certificate and that you are <a href="%s">forcing the checkout pages to be secured.</a>', 'moneroo-woocommerce'), esc_html($this->method_title), esc_url(admin_url("admin.php?page=$destination"))) . '</p></div>');
+            echo wp_kses_post('<div class="error"><p>' . sprintf(__('<strong>%1$s</strong> is enabled and WooCommerce is not forcing the SSL certificate on your checkout page. Please ensure that you have a valid SSL certificate and that you are <a href="%2$s">forcing the checkout pages to be secured.</a>', 'moneroo'), esc_html($this->method_title), esc_url(admin_url("admin.php?page=$destination"))) . '</p></div>');
         }
     }
 
@@ -310,7 +310,7 @@ class Moneroo_WC_Gateway extends \WC_Payment_Gateway
         }
         if (! $this->moneroo_wc_keys_are_set()) {
             echo wp_kses_post('<div class="error"><p>'
-                . sprintf(__('<strong>%s</strong> is enabled, but you have not entered your API keys. Please enter them <a href="%s">here</a>, to be able to accept payments with Moneroo.', 'moneroo-woocommerce'), esc_html($this->method_title), esc_url(admin_url('admin.php?page=wc-settings&tab=checkout&section=moneroo_woocommerce_plugin'))) . '</p></div>');
+                . sprintf(__('<strong>%1$s</strong> is enabled, but you have not entered your API keys. Please enter them <a href="%2$s">here</a>, to be able to accept payments with Moneroo.', 'moneroo'), esc_html($this->method_title), esc_url(admin_url('admin.php?page=wc-settings&tab=checkout&section=moneroo_woocommerce_plugin'))) . '</p></div>');
             return false;
         }
 
