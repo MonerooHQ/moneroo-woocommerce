@@ -39,20 +39,32 @@ final class Moneroo_WC_Gateway_Blocks extends AbstractPaymentMethodType
     public function get_payment_method_script_handles(): array
     {
         $script_url = plugins_url('build/index.js', MONEROO_WC_MAIN_FILE);
+        $asset_path = plugin_dir_path(__FILE__) . '/build/index.asset.php';
+        $dependencies = ['react', 'wp-html-entities'];
+
+        if (file_exists($asset_path)) {
+            $asset = require $asset_path;
+
+            $version = is_array($asset) && isset($asset['version'])
+                ? $asset['version']
+                : MONEROO_WC__VERSION;
+
+            $dependencies = is_array($asset) && isset($asset['dependencies'])
+                ? $asset['dependencies']
+                : $dependencies;
+        }
+
         wp_register_script(
             'moneroo_wc_woocommerce_plugin-blocks-integration',
             $script_url,
-            [
-                'react',
-                'wp-html-entities',
-            ],
-            null,
+            $dependencies,
+            $version,
             true
         );
 
-        //         if (function_exists('wp_set_script_translations')) {
-        //             wp_set_script_translations('moneroo-for-woocommerce', 'moneroo-for-woocommerce',);
-        //         }
+        if (function_exists('wp_set_script_translations')) {
+            wp_set_script_translations('moneroo_wc_woocommerce_plugin-blocks-integration', 'moneroo');
+        }
 
         return ['moneroo_wc_woocommerce_plugin-blocks-integration'];
     }
