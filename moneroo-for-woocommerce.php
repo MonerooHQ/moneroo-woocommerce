@@ -19,7 +19,7 @@ use Moneroo\WooCommerce\Moneroo_WC_Gateway;
  * WC requires at least: 5.3
  * WC tested up to: 9.8
  * Text Domain: moneroo
- * Domain Path: /languages.
+ * Domain Path: /languages
  */
 
 const MONEROO_WC_MAIN_FILE = __FILE__;
@@ -32,7 +32,7 @@ if (! in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', ge
 
 
 // Include the Composer autoload file
-require_once plugin_dir_path(__DIR__) . 'moneroo/vendor/autoload.php';
+require_once plugin_dir_path(__FILE__) . 'vendor/autoload.php';
 
 /**
  * Initialize Moneroo Payment Gateway Class.
