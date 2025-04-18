@@ -82,7 +82,7 @@ jobs:
                   
           mkdir -p $PLUGIN_BUILDS_PATH
           
-          zip -r $ZIP_FILE . -x "build-cfg/*" "builds/*" ".*" "wp-assets/*" "node_modules/*" "phpunit.xml.dist" "unused-scanner.php" "composer.json" "composer.lock" "README.md" ".php-cs-fixer.dist.php" "phpstan.neon" "phpunit.xml" "src/index.js" "pnpm-lock.yaml" "test.sh" "package-lock.json" "package.json"
+          zip -r $ZIP_FILE . -x "build-cfg/*" "builds/*" ".*" "wp-assets/*" "node_modules/*" "phpunit.xml.dist" "unused-scanner.php"  "README.md" ".php-cs-fixer.dist.php" "phpstan.neon" "phpunit.xml" "src/index.js" "pnpm-lock.yaml" "test.sh" "package-lock.json" "package.json"
           
           if [ ! -f "$ZIP_FILE" ]; then
             echo "Built zip file $ZIP_FILE does not exist" 1>&2
