@@ -88,6 +88,13 @@ If you get stuck, you can ask for help in the Plugin Forum or via the [Moneroo S
 
 == Changelog ==
 
+= 2.0
+* Fixed license consistency to GPLv3
+* Updated text domain to match plugin slug
+* Improved translations support for both English and French
+* Fixed direct file access security
+* Added composer.json in the expected location
+
 = 1.0.0 =
 * Initial release
 
