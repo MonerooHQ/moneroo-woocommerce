@@ -1,0 +1,150 @@
+# Copyright (C) 2023 Axa Zara
+# This file is distributed under the same license as the Moneroo for WooCommerce plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: Moneroo for WooCommerce\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/moneroo\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2023-09-05 16:46+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.8.1\n"
+"X-Domain: moneroo\n"
+
+#: admin/moneroo-settings.php:10
+msgid "Enable/Disable"
+msgstr ""
+
+#: admin/moneroo-settings.php:11
+msgid "Enable Moneroo"
+msgstr ""
+
+#: admin/moneroo-settings.php:18
+msgid "(Optional) Title"
+msgstr ""
+
+#: admin/moneroo-settings.php:20
+msgid "This controls the title which the user sees during checkout."
+msgstr ""
+
+#: admin/moneroo-settings.php:21 includes/class-wc-moneroo-gateway.php:80
+msgid "Mobile Money, Credit Card, Bank transfer and more"
+msgstr ""
+
+#: admin/moneroo-settings.php:26
+msgid "(Optional) Description"
+msgstr ""
+
+#: admin/moneroo-settings.php:29
+msgid "This controls the description which the user sees during checkout."
+msgstr ""
+
+#: admin/moneroo-settings.php:30 includes/class-wc-moneroo-gateway.php:84
+msgid "Pay securely with your Mobile Money account, credit card, bank account or other payment methods."
+msgstr ""
+
+#: admin/moneroo-settings.php:35
+msgid "Public KEY"
+msgstr ""
+
+#: admin/moneroo-settings.php:38 admin/moneroo-settings.php:45
+msgid "Get your API keys from your Moneroo dashboard"
+msgstr ""
+
+#: admin/moneroo-settings.php:42
+msgid "Private KEY"
+msgstr ""
+
+#: admin/moneroo-settings.php:49
+msgid "Webhook URL"
+msgstr ""
+
+#: admin/moneroo-settings.php:53
+msgid "This is the Webhook URL you should add to your Moneroo dashboard for webhook notifications."
+msgstr ""
+
+#: admin/moneroo-settings.php:60
+msgid "Webhook Secret"
+msgstr ""
+
+#: admin/moneroo-settings.php:64
+msgid "This is the Webhook Secret you should add to your Moneroo dashboard for webhook notifications."
+msgstr ""
+
+#: includes/class-wc-moneroo-gateway.php:50
+msgid "Enable your customers to pay you anywhere in Africa and around the world using multiple local payment methods with a single integration to many payment gateways."
+msgstr ""
+
+#: includes/class-wc-moneroo-gateway.php:274
+msgid "<strong>%s</strong> is enabled and WooCommerce is not forcing the SSL certificate on your checkout page. Please ensure that you have a valid SSL certificate and that you are <a href=\"%s\">forcing the checkout pages to be secured.</a>"
+msgstr ""
+
+#: includes/class-wc-moneroo-gateway.php:311
+msgid "<strong>%s</strong> is enabled, but you have not entered your API keys. Please enter them <a href=\"%s\">here</a>, to be able to accept payments with Moneroo."
+msgstr ""
+
+#: includes/handlers/class-moneroo-payment-handler.php:100
+msgid "Payment was successful on Moneroo"
+msgstr ""
+
+#: includes/handlers/class-moneroo-payment-handler.php:103
+#: includes/handlers/class-moneroo-payment-handler.php:127
+#: includes/handlers/class-moneroo-payment-handler.php:151
+msgid "Thank you for your order.<br>"
+msgstr ""
+
+#: includes/handlers/class-moneroo-payment-handler.php:104
+msgid "Your payment was successful, we are now <strong>processing</strong> your order."
+msgstr ""
+
+#: includes/handlers/class-moneroo-payment-handler.php:122
+msgid "Payment is pending on Moneroo"
+msgstr ""
+
+#: includes/handlers/class-moneroo-payment-handler.php:128
+msgid "Your payment has not been confirmed yet, so we have to put your order <strong>on-hold</strong>, once the payment is confirmed, we will <strong>process</strong> your order."
+msgstr ""
+
+#: includes/handlers/class-moneroo-payment-handler.php:129
+#: includes/handlers/class-moneroo-payment-handler.php:153
+msgid "If this persists, Please, contact us for information regarding this order."
+msgstr ""
+
+#: includes/handlers/class-moneroo-payment-handler.php:145
+msgid "Attention: New order has been placed on hold because of incorrect payment amount. Please, look into it. <br>"
+msgstr ""
+
+#: includes/handlers/class-moneroo-payment-handler.php:147
+msgid "Amount paid: "
+msgstr ""
+
+#: includes/handlers/class-moneroo-payment-handler.php:152
+msgid "Your payment has not been confirmed yet, so we have to put your order <strong>on-hold</strong>, once the payment is confirmed, we will <strong>process</strong> your order. "
+msgstr ""
+
+#: includes/handlers/class-moneroo-payment-handler.php:166
+msgid "Payment failed on Moneroo"
+msgstr ""
+
+#: includes/handlers/class-moneroo-payment-handler.php:170
+msgid "Your payment <strong>failed</strong>. "
+msgstr ""
+
+#: includes/handlers/class-moneroo-payment-handler.php:171
+msgid "Please, try funding your account."
+msgstr ""
+
+#: moneroo-for-woocommerce.php:78
+msgid "Settings"
+msgstr ""
+
+#: moneroo-for-woocommerce.php:79
+msgid "Docs"
+msgstr ""
+
+#: moneroo-for-woocommerce.php:80
+msgid "Get help"
+msgstr "" 

@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: \n"
+"Project-Id-Version: moneroo\n"
 "POT-Creation-Date: 2023-09-05 16:46+0100\n"
 "PO-Revision-Date: 2023-09-05 16:54+0100\n"
 "Last-Translator: \n"
@@ -11,11 +11,12 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 3.3.2\n"
 "X-Poedit-Basepath: ..\n"
-"X-Poedit-KeywordsList: __\n"
+"X-Poedit-KeywordsList: __;_e;esc_html__;esc_html_e;esc_attr__;esc_attr_e\n"
 "X-Poedit-SearchPath-0: moneroo-for-woocommerce.php\n"
-"X-Poedit-SearchPath-1: includes/class-wc-moneroo-gateway.php\n"
-"X-Poedit-SearchPath-2: includes/handlers/class-moneroo-payment-handler.php\n"
-"X-Poedit-SearchPath-3: admin/moneroo-settings.php\n"
+"X-Poedit-SearchPath-1: src\n"
+"X-Poedit-SearchPath-2: includes/class-wc-moneroo-gateway.php\n"
+"X-Poedit-SearchPath-3: includes/handlers/class-moneroo-payment-handler.php\n"
+"X-Poedit-SearchPath-4: admin/moneroo-settings.php\n"
 
 #: admin/moneroo-settings.php:10
 msgid "Enable/Disable"
@@ -63,7 +64,7 @@ msgstr "Clé publique"
 
 #: admin/moneroo-settings.php:38 admin/moneroo-settings.php:45
 msgid "Get your API keys from your Moneroo dashboard"
-msgstr "Obtenez vos clés d’API à partir de votre tableau de bord Moneroo"
+msgstr "Obtenez vos clés d'API à partir de votre tableau de bord Moneroo"
 
 #: admin/moneroo-settings.php:42
 msgid "Private KEY"
@@ -78,7 +79,7 @@ msgid ""
 "This is the Webhook URL you should add to your Moneroo dashboard for webhook "
 "notifications."
 msgstr ""
-"Il s’agit de l’URL du Webhook que vous devez ajouter à votre tableau de bord "
+"Il s'agit de l'URL du Webhook que vous devez ajouter à votre tableau de bord "
 "Moneroo pour les notifications en arrière-plan."
 
 #: admin/moneroo-settings.php:60
@@ -90,7 +91,7 @@ msgid ""
 "This is the Webhook Secret you should add to your Moneroo dashboard for "
 "webhook notifications."
 msgstr ""
-"Il s’agit du Secret Webhook que vous devez ajouter à votre tableau de bord "
+"Il s'agit du Secret Webhook que vous devez ajouter à votre tableau de bord "
 "Moneroo pour les notifications en arrière-plan."
 
 #: includes/class-wc-moneroo-gateway.php:50
@@ -112,9 +113,9 @@ msgid ""
 "secured.</a>"
 msgstr ""
 "<strong>%s</strong>  est activé et WooCommerce ne force pas le certificat "
-"SSL sur votre page de paiement. Veuillez vous assurer que vous disposez d’un "
-"certificat SSL valide et que vous êtes bien en possession d’un certificat "
-"SSL. <a href=“%s”>Forcer les pages de paiement à être sécurisées.</a>"
+"SSL sur votre page de paiement. Veuillez vous assurer que vous disposez d'un "
+"certificat SSL valide et que vous êtes bien en possession d'un certificat "
+"SSL. <a href=\"%s\">Forcer les pages de paiement à être sécurisées.</a>"
 
 #: includes/class-wc-moneroo-gateway.php:311
 #, php-format
@@ -123,8 +124,8 @@ msgid ""
 "Please enter them <a href=\"%s\">here</a>, to be able to accept payments "
 "with Moneroo."
 msgstr ""
-"<strong>%s</strong> est activé, mais vous n’avez pas saisi vos clés API. "
-"Veuillez les saisir <a href=“%s”>ici</a> pour pouvoir accepter des paiements "
+"<strong>%s</strong> est activé, mais vous n'avez pas saisi vos clés API. "
+"Veuillez les saisir <a href=\"%s\">ici</a> pour pouvoir accepter des paiements "
 "avec Moneroo."
 
 #: includes/handlers/class-moneroo-payment-handler.php:100
@@ -155,7 +156,7 @@ msgid ""
 "<strong>on-hold</strong>, once the payment is confirmed, we will "
 "<strong>process</strong> your order."
 msgstr ""
-"Votre paiement n’a pas encore été confirmé, nous avons donc mis votre "
+"Votre paiement n'a pas encore été confirmé, nous avons donc mis votre "
 "commande en <strong>attente</strong>. Une fois le paiement <strong>confirmé</"
 "strong>, nous traiterons votre commande."
 
@@ -172,7 +173,7 @@ msgid ""
 "Attention: New order has been placed on hold because of incorrect payment "
 "amount. Please, look into it. <br>"
 msgstr ""
-"Attention : La nouvelle commande a été mise en attente en raison d’un "
+"Attention : La nouvelle commande a été mise en attente en raison d'un "
 "montant de paiement incorrect. Veuillez vérifier.<br>"
 
 #: includes/handlers/class-moneroo-payment-handler.php:147
@@ -185,7 +186,7 @@ msgid ""
 "<strong>on-hold</strong>, once the payment is confirmed, we will "
 "<strong>process</strong> your order. "
 msgstr ""
-"Votre paiement n’a pas encore été confirmé, nous avons donc mis votre "
+"Votre paiement n'a pas encore été confirmé, nous avons donc mis votre "
 "commande en <strong>attente</strong>. Une fois le paiement <strong>confirmé</"
 "strong>, nous traiterons votre commande. "
 
@@ -199,7 +200,7 @@ msgstr "Votre paiement a <strong>échoué</strong>. "
 
 #: includes/handlers/class-moneroo-payment-handler.php:171
 msgid "Please, try funding your account."
-msgstr "S’il vous plaît, essayez d’approvisionner votre compte ou réessayez."
+msgstr "S'il vous plaît, essayez d'approvisionner votre compte ou réessayez."
 
 #: moneroo-for-woocommerce.php:74
 msgid "Settings"
@@ -211,4 +212,4 @@ msgstr "Documentations"
 
 #: moneroo-for-woocommerce.php:76
 msgid "Get help"
-msgstr "Obtenir de l’aide"
+msgstr "Obtenir de l'aide"
