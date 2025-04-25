@@ -78,7 +78,7 @@ final class Moneroo_WC_Gateway_Blocks extends AbstractPaymentMethodType
         return [
             'title'       => $this->gateway->title,
             'description' => $this->gateway->description,
-            'icon'        => $this->gateway->icon,
+            'icon'        => plugins_url('/../assets/img/icon.svg', __FILE__),
         ];
     }
 }
