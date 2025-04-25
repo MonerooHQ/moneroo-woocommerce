@@ -41,6 +41,7 @@ final class Moneroo_WC_Gateway_Blocks extends AbstractPaymentMethodType
         $script_url = plugins_url('build/index.js', MONEROO_WC_MAIN_FILE);
         $asset_path = plugin_dir_path(__FILE__) . '/build/index.asset.php';
         $dependencies = ['react', 'wp-html-entities'];
+        $version = MONEROO_WC__VERSION;
 
         if (file_exists($asset_path)) {
             $asset = require $asset_path;
