@@ -56,7 +56,7 @@ class Moneroo_WC_Gateway extends \WC_Payment_Gateway
     private function moneroo_wc_initialize_gateway_details(): void
     {
         $this->id = 'moneroo_wc_woocommerce_plugin';
-        $this->icon = plugins_url('/../assets/img/logo.jpg', __FILE__);
+        $this->icon = plugins_url('/../assets/img/icon.svg', __FILE__);
         $this->has_fields = false;
         $this->method_title = 'Moneroo for WooCommerce';
         $this->method_description = esc_html__('Accept payments via Mobile Money, Credit Card, Bank transfer through single integration to many payment gateways.', 'moneroo');
