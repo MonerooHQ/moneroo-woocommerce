@@ -2,6 +2,70 @@
 
 Guidance for Claude Code and other AI agents working in this repository.
 
+## Project overview
+
+This is the Moneroo for WooCommerce plugin — a WordPress payment gateway that lets WooCommerce stores accept Mobile Money, credit card, and bank transfers across Africa via the Moneroo payment platform. It is distributed on the WordPress Plugin Directory (slug: `moneroo`) and consumed by WordPress site operators who install it through the WP admin. The plugin wraps the `moneroo/moneroo-php` SDK and registers a custom `WC_Payment_Gateway` subclass.
+
+## Tech stack
+
+- PHP 7.4+ (minimum required; CI tests against 8.1)
+- WordPress 5.0+ / WooCommerce 4.0+ (tested up to WP 6.8 / WC 9.8)
+- `moneroo/moneroo-php` v0.1.0 — official Moneroo PHP SDK
+- `axazara/php-cs` — PHP CS Fixer rule set for code style
+- `@wordpress/scripts` ^27.9 — webpack-based JS build toolchain (for Blocks support)
+- `spatie/ray` (dev) — debugging helper
+
+## Getting started
+
+```bash
+# Install PHP dependencies
+composer install
+
+# Install JS dependencies
+npm install
+
+# Build JS assets (required for WooCommerce Blocks support)
+npm run build
+```
+
+Configure the plugin by activating it in WP Admin and entering a Moneroo private API key under WooCommerce → Settings → Payments → Moneroo.
+
+## Common commands
+
+| Task | Command |
+|---|---|
+| Build JS (production) | `npm run build` |
+| Watch JS (development) | `npm start` |
+| Format PHP code | `composer format` |
+| Lint PHP (dry-run) | `composer sniff` |
+| Scan unused dependencies | `composer unused` |
+| Build plugin ZIP (local) | `bash test.sh` |
+
+## Architecture
+
+The plugin is intentionally lean (KISS principle). Key files and directories:
+
+- `moneroo-for-woocommerce.php` — plugin entry point; registers hooks, autoloader, and feature compatibility declarations (HPOS, Cart/Checkout Blocks).
+- `src/Moneroo_WC_Gateway.php` — extends `WC_Payment_Gateway`; handles payment initiation via `Moneroo\Payment::init()`, return URL routing, and webhook reception.
+- `src/Handlers/Moneroo_WC_Payment_Handler.php` — processes payment responses (success / pending / insufficient / failed) and updates WooCommerce order statuses accordingly.
+- `src/Moneroo_WC_Gateway_Blocks.php` — integrates the gateway with the WooCommerce Cart & Checkout Blocks API.
+- `src/Settings/moneroo-settings.php` — returns the form fields array for the gateway admin settings page.
+- `src/index.js` — JavaScript entry point compiled by `@wordpress/scripts` into `build/index.js` for Blocks.
+- `assets/` — plugin icon and front-end assets.
+- `languages/` — translation `.pot`/`.po` files; text domain is `moneroo`.
+- `wp-assets/` — WordPress Plugin Directory screenshots/banner images (excluded from plugin ZIP).
+
+On tag push, GitHub Actions builds the ZIP, publishes it to a Cloudflare R2 bucket, and deploys to the WordPress SVN repository via `10up/action-wordpress-plugin-deploy`.
+
+## Conventions
+
+- Code style is enforced by `axazara/php-cs` (PHP CS Fixer). Run `composer format` before every commit; CI will reject non-conforming code via `composer sniff`.
+- Unused dependency scanning runs in CI via `composer unused`.
+- Follow TDD: add test cases for every change (project follows KISS + TDD principles per README).
+- The plugin version is stored as `__STABLE_TAG__` placeholder in both `moneroo-for-woocommerce.php` and `readme.txt`; the CI workflow replaces it with the Git tag at release time. Never hard-code a version number.
+- PSR-4 autoloading under the `Moneroo\WooCommerce\` namespace, rooted at `src/`.
+- All user-facing strings must be wrapped with `esc_html__()` / `wp_kses_post()` and use the `moneroo` text domain.
+
 ## Git Conventions
 
 ### 1. Branch names
